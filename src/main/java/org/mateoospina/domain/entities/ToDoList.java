@@ -1,4 +1,4 @@
-package org.mateoospina.entities;
+package org.mateoospina.domain.entities;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -6,7 +6,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Date;
 
+@Builder
 @Entity
 @Table(name = "Note")
 @AllArgsConstructor
@@ -15,7 +18,7 @@ import java.time.LocalDate;
 @Setter
 @EqualsAndHashCode
 @EntityListeners( AuditingEntityListener.class )
-public class Note {
+public class ToDoList {
 
     @SequenceGenerator(
             name = "note_sequence",
@@ -31,13 +34,15 @@ public class Note {
     private Long id;
 
     @Column(unique = true)
-    private String title;
+    private String name;
 
     private String description;
 
-    @CreatedDate
-    private LocalDate createdDate =
-            LocalDate.now();
+    private Date createdDate = Calendar.getInstance().getTime();
 
-    private LocalDate completionDate;
+    private Date completionDate;
+
+    private Boolean completed;
+
+    private String user;
 }

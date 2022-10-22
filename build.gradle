@@ -19,6 +19,19 @@ jacoco {
     toolVersion = "0.8.8"
 }
 
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.from = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'org/mateoospina/infrastructure/config/**',
+                    'org/mateoospina/infrastructure/model/**',
+                    'org/mateoospina/domain/entities/**',
+                    'org/mateoospina/TodoListApp*'
+            ])
+        })
+    }
+}
+
 configurations {
     developmentOnly
     runtimeClasspath {

@@ -1,31 +1,29 @@
 package org.mateoospina.services;
 
-import org.mateoospina.entities.Note;
-import org.mateoospina.repositories.NoteRepository;
+import org.mateoospina.domain.entities.ToDoList;
+import org.mateoospina.domain.persistence.ListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class NoteServiceImplementation implements INoteService {
 
     @Autowired
-    private NoteRepository noteRepository;
+    private ListRepository noteRepository;
 
     @Override
-    public List<Note> getNotes() {
+    public java.util.List getNotes() {
         return noteRepository.findAll();
     }
 
     @Override
-    public Note saveNote(Note note) {
-        return noteRepository.save(note);
+    public ToDoList saveNote(ToDoList toDoList) {
+        return noteRepository.save(toDoList);
     }
 
     @Override
-    public Note updateNote(Note note) {
-        return noteRepository.save(note);
+    public ToDoList updateNote(ToDoList toDoList) {
+        return noteRepository.save(toDoList);
     }
 
     @Override
