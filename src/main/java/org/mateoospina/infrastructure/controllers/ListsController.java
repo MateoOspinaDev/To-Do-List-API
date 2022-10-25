@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/lists")
 public class ListsController {
@@ -28,19 +30,11 @@ public class ListsController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveNote(@RequestBody ToDoListsDTO toDoListsDTO){ // to do the mapping
-        try{
+    public ResponseEntity<?> saveNote(@Valid @RequestBody ToDoListsDTO toDoListsDTO){ // to do the mapping
             ToDoList toDoListToCreate = ToDoListMapper.toToDoList(toDoListsDTO);
             ToDoList toDoListCreated = listCreator.create(toDoListToCreate);
             ToDoListsDTO toDoListDTOCreated = ToDoListMapper.ToDoListInfra(toDoListCreated);
             return new ResponseEntity(toDoListDTOCreated, HttpStatus.CREATED);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity(new Error("Solicitud errada", e.getMessage().split(System.lineSeparator())),
-                    HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity(new Error("Error inesperado", new String[]{e.getMessage()}),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
 
     @PutMapping(params = "noteId")

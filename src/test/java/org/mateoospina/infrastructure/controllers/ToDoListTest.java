@@ -15,16 +15,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
+
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.port;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
@@ -80,7 +76,7 @@ class ToDoListTest {
         mockMvc.perform(post("/lists").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(toDoListInfra)))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("100")));
+                .andExpect(content().string(containsString("100")));
     }
 
     @Test
@@ -95,7 +91,7 @@ class ToDoListTest {
         mockMvc.perform(post("/lists").contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(toDoListInfra)))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string(org.hamcrest.Matchers.containsString("Name is empty")));
+                .andExpect(content().string(containsString("Name is empty")));
     }
 
 }

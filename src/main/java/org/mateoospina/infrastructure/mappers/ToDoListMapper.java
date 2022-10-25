@@ -25,6 +25,7 @@ public class ToDoListMapper {
         toDoListInfra.setDescription(toDoList.getDescription());
         toDoListInfra.setUser(toDoList.getUser());
         toDoListInfra.setDate(Calendar.getInstance().getTime());
+        toDoListInfra.setCompleted(toDoList.getCompleted());
         return toDoListInfra;
     }
 }

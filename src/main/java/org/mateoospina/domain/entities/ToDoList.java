@@ -5,7 +5,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -33,7 +32,6 @@ public class ToDoList {
     @Column(name = "id")
     private Long id;
 
-    @Column(unique = true)
     private String name;
 
     private String description;
