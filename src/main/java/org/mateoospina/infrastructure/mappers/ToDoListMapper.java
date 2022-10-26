@@ -15,10 +15,11 @@ public class ToDoListMapper {
         toDoList.setName(toDoListInfra.getName());
         toDoList.setDescription(toDoListInfra.getDescription());
         toDoList.setUser(toDoListInfra.getUser());
+        toDoList.setCompleted(toDoListInfra.getCompleted());
         return toDoList;
     }
 
-    public static ToDoListsDTO ToDoListInfra(ToDoList toDoList){
+    public static ToDoListsDTO toDoListDTO(ToDoList toDoList){
         ToDoListsDTO toDoListInfra = new ToDoListsDTO();
         toDoListInfra.setId(toDoList.getId());
         toDoListInfra.setName(toDoList.getName());

@@ -2,6 +2,9 @@ package org.mateoospina.services;
 
 import org.mateoospina.domain.entities.ToDoList;
 import org.mateoospina.domain.persistence.ListRepository;
+import org.mateoospina.infrastructure.exception.ToDoListNotFoundException;
+import org.mateoospina.infrastructure.mappers.ToDoListMapper;
+import org.mateoospina.infrastructure.model.ToDoListsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +15,11 @@ public class NoteServiceImplementation implements INoteService {
     private ListRepository noteRepository;
 
     @Override
-    public java.util.List getNotes() {
-        return noteRepository.findAll();
+    public ToDoListsDTO getNoteById(long id) {
+        ToDoList list = noteRepository.findById(id).orElseThrow(
+                () -> new ToDoListNotFoundException("List with id:"+id+" not found")
+        );
+        return ToDoListMapper.toDoListDTO(list);
     }
 
     @Override

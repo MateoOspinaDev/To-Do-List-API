@@ -1,6 +1,7 @@
 package org.mateoospina.infrastructure.exception;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,4 +28,11 @@ public class RestResponseEntityExceptionHandler {
         return errors;
     }
 
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ToDoListNotFoundException.class)
+    public Map<String, String> notFoundToDoListException(ToDoListNotFoundException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", ex.getMessage());
+        return errors;
+    }
 }
