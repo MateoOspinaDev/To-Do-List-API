@@ -1,12 +1,12 @@
 package org.mateoospina.domain.entities;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @Entity
@@ -43,4 +43,6 @@ public class ToDoList {
     private Boolean completed;
 
     private String user;
+
+    private List<Item> items;
 }

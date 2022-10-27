@@ -6,8 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.mateoospina.domain.entities.ToDoList;
-import org.mateoospina.domain.listServices.ListCreator;
-import org.mateoospina.domain.listServices.ListServices;
+import org.mateoospina.domain.listServices.ListMediator;
 import org.mateoospina.infrastructure.exception.ToDoListNotFoundException;
 import org.mateoospina.infrastructure.mappers.ToDoListMapper;
 import org.mateoospina.infrastructure.model.ToDoListsDTO;
@@ -25,21 +24,18 @@ public class ListsController {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @Autowired
-    private ListServices listGenerator;
-
-    @Autowired
-    private ListCreator listCreator;
+    private ListMediator listMediator;
 
     @GetMapping(value="/{id}")
     public ResponseEntity<ToDoListsDTO> GetNoteById(@PathVariable long id){
-        ToDoListsDTO listList = listGenerator.getNoteById(id);
+        ToDoListsDTO listList = listMediator.getNoteById(id);
         return ResponseEntity.ok().body(listList);
     }
 
     @PostMapping
     public ResponseEntity<?> saveNote(@Valid @RequestBody ToDoListsDTO toDoListsDTO){ // to do the mapping
             ToDoList toDoListToCreate = ToDoListMapper.toToDoList(toDoListsDTO);
-            ToDoList toDoListCreated = listCreator.create(toDoListToCreate);
+            ToDoList toDoListCreated = listMediator.create(toDoListToCreate);
             ToDoListsDTO toDoListDTOCreated = ToDoListMapper.toDoListDTO(toDoListCreated);
             return new ResponseEntity(toDoListDTOCreated, HttpStatus.CREATED);
     }
@@ -47,11 +43,11 @@ public class ListsController {
     @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
     public ResponseEntity<ToDoListsDTO> updateNote(@RequestBody JsonPatch patch, @PathVariable long id){
         try {
-            ToDoListsDTO customer = listGenerator.getNoteById(id);
-            ToDoListsDTO customerPatched = applyPatchToCustomer(patch, customer);
-            ToDoList toDoListToCreate = ToDoListMapper.toToDoList(customerPatched);
-            listCreator.create(toDoListToCreate);
-            return ResponseEntity.ok(customerPatched);
+            ToDoListsDTO toDoListsDTO = listMediator.getNoteById(id);
+            ToDoListsDTO toDoListsDTOPatched = jsonPatchToToDoList(patch, toDoListsDTO);
+            ToDoList toDoListToCreate = ToDoListMapper.toToDoList(toDoListsDTOPatched);
+            listMediator.create(toDoListToCreate);
+            return ResponseEntity.ok(toDoListsDTOPatched);
         } catch (JsonPatchException | JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         } catch (ToDoListNotFoundException e) {
@@ -59,14 +55,14 @@ public class ListsController {
         }
     }
 
-    private ToDoListsDTO applyPatchToCustomer(JsonPatch patch, ToDoListsDTO targetCustomer) throws JsonPatchException, JsonProcessingException {
-        JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
+    private ToDoListsDTO jsonPatchToToDoList(JsonPatch patch, ToDoListsDTO toDoListsDTO) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(toDoListsDTO, JsonNode.class));
         return objectMapper.treeToValue(patched, ToDoListsDTO.class);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteNote(@PathVariable ("id") Long id){
-        listGenerator.deleteNote(id);
+        listMediator.deleteNote(id);
         return ResponseEntity.ok().build();
     }
 }

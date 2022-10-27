@@ -6,12 +6,17 @@ import org.mateoospina.infrastructure.exception.ToDoListNotFoundException;
 import org.mateoospina.infrastructure.mappers.ToDoListMapper;
 import org.mateoospina.infrastructure.model.ToDoListsDTO;
 
-public class ListServicesDefault implements ListServices {
+
+public class ListMediatorDefault implements ListMediator {
 
     private ListRepository listRepository;
 
-    public ListServicesDefault(ListRepository listRepository) {
+    public ListMediatorDefault(ListRepository listRepository) {
         this.listRepository = listRepository;
+    }
+
+    public ToDoList create(ToDoList toDoList){
+        return listRepository.save(toDoList);
     }
 
     @Override
@@ -36,4 +41,5 @@ public class ListServicesDefault implements ListServices {
         }
         return ToDoListMapper.toDoListDTO(listRepository.findById(id).get());
     }
+
 }

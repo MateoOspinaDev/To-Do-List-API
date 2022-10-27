@@ -3,21 +3,20 @@ package org.mateoospina.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mateoospina.domain.entities.ToDoList;
-import org.mateoospina.domain.listServices.ListCreator;
-import org.mateoospina.domain.listServices.ListCreatorDefault;
+import org.mateoospina.domain.listServices.ListMediator;
+import org.mateoospina.domain.listServices.ListMediatorDefault;
 import org.mateoospina.domain.persistence.ListRepository;
 import org.mockito.Mock;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.openMocks;
 
-class ListCreatorDefaultTest {
+class ListMediatorDefaultTest {
     @Mock
     private ListRepository repository;
-    private ListCreator mediator;
+    private ListMediator mediator;
     private ToDoList toDoListIn;
 
     @BeforeEach
@@ -37,7 +36,7 @@ class ListCreatorDefaultTest {
 
         openMocks(this);
         when(repository.save(any(ToDoList.class))).thenReturn(toDoListOut);
-        mediator = new ListCreatorDefault(repository);
+        mediator = new ListMediatorDefault(repository);
     }
 
     @Test
