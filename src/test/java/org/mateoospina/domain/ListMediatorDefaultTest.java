@@ -41,7 +41,7 @@ class ListMediatorDefaultTest {
 
     @Test
     void shouldCreateAListSuccessful() {
-        ToDoList listCreated = mediator.create(toDoListIn);
+        ToDoList listCreated = mediator.createList(toDoListIn);
 
         assertEquals(100, listCreated.getId());
         verify(repository).save(any(ToDoList.class));

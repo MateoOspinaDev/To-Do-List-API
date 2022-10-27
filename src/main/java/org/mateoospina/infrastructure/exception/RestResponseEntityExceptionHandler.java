@@ -35,4 +35,12 @@ public class RestResponseEntityExceptionHandler {
         errors.put("message", ex.getMessage());
         return errors;
     }
+
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ItemNotFoundException.class)
+    public Map<String, String> notFoundItemException(ItemNotFoundException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("message", ex.getMessage());
+        return errors;
+    }
 }

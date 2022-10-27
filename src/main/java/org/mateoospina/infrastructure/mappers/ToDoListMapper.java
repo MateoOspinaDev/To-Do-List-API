@@ -1,13 +1,18 @@
 package org.mateoospina.infrastructure.mappers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.mateoospina.domain.entities.ToDoList;
 import org.mateoospina.infrastructure.model.ToDoListsDTO;
 
-import java.time.LocalDate;
 import java.util.Calendar;
-import java.util.Date;
 
 public class ToDoListMapper {
+
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     public static ToDoList toToDoList(ToDoListsDTO toDoListInfra){
         ToDoList toDoList = new ToDoList();
@@ -28,5 +33,10 @@ public class ToDoListMapper {
         toDoListInfra.setDate(Calendar.getInstance().getTime());
         toDoListInfra.setCompleted(toDoList.getCompleted());
         return toDoListInfra;
+    }
+
+    public static ToDoListsDTO jsonPatchToToDoList(JsonPatch patch, ToDoListsDTO toDoListsDTO) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(toDoListsDTO, JsonNode.class));
+        return objectMapper.treeToValue(patched, ToDoListsDTO.class);
     }
 }

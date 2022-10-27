@@ -9,18 +9,19 @@ import org.mateoospina.infrastructure.model.ToDoListsDTO;
 
 public class ListMediatorDefault implements ListMediator {
 
-    private ListRepository listRepository;
+    private final ListRepository listRepository;
 
     public ListMediatorDefault(ListRepository listRepository) {
         this.listRepository = listRepository;
     }
 
-    public ToDoList create(ToDoList toDoList){
+    @Override
+    public ToDoList createList(ToDoList toDoList){
         return listRepository.save(toDoList);
     }
 
     @Override
-    public ToDoListsDTO getNoteById(long id) {
+    public ToDoListsDTO getListById(long id) {
         ToDoList list = listRepository.findById(id).orElseThrow(
                 () -> new ToDoListNotFoundException("List with id: "+id+" not found")
         );
@@ -28,18 +29,10 @@ public class ListMediatorDefault implements ListMediator {
     }
 
     @Override
-    public void deleteNote(Long id) {
+    public void deleteListById(Long id) {
         if(!listRepository.existsById(id)) {
             throw new ToDoListNotFoundException("List with id: "+id+" not exists, that's why it can't be removed.");
         }
         listRepository.deleteById(id);
     }
-
-    public ToDoListsDTO findNoteById(Long id) {
-        if(!listRepository.existsById(id)) {
-            throw new ToDoListNotFoundException("List with id: "+id+" not exists, that's why it can't be removed.");
-        }
-        return ToDoListMapper.toDoListDTO(listRepository.findById(id).get());
-    }
-
 }

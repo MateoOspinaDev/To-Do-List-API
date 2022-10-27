@@ -21,32 +21,30 @@ import javax.validation.Valid;
 @RequestMapping("/lists")
 public class ListsController {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-
     @Autowired
     private ListMediator listMediator;
 
-    @GetMapping(value="/{id}")
-    public ResponseEntity<ToDoListsDTO> GetNoteById(@PathVariable long id){
-        ToDoListsDTO listList = listMediator.getNoteById(id);
+    @GetMapping(value="/{listId}")
+    public ResponseEntity<ToDoListsDTO> GetNoteById(@PathVariable long listId){
+        ToDoListsDTO listList = listMediator.getListById(listId);
         return ResponseEntity.ok().body(listList);
     }
 
     @PostMapping
     public ResponseEntity<?> saveNote(@Valid @RequestBody ToDoListsDTO toDoListsDTO){ // to do the mapping
             ToDoList toDoListToCreate = ToDoListMapper.toToDoList(toDoListsDTO);
-            ToDoList toDoListCreated = listMediator.create(toDoListToCreate);
+            ToDoList toDoListCreated = listMediator.createList(toDoListToCreate);
             ToDoListsDTO toDoListDTOCreated = ToDoListMapper.toDoListDTO(toDoListCreated);
             return new ResponseEntity(toDoListDTOCreated, HttpStatus.CREATED);
     }
 
-    @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
-    public ResponseEntity<ToDoListsDTO> updateNote(@RequestBody JsonPatch patch, @PathVariable long id){
+    @PatchMapping(path = "/{listId}", consumes = "application/json-patch+json")
+    public ResponseEntity<ToDoListsDTO> updateNote(@RequestBody JsonPatch patch, @PathVariable long listId){
         try {
-            ToDoListsDTO toDoListsDTO = listMediator.getNoteById(id);
-            ToDoListsDTO toDoListsDTOPatched = jsonPatchToToDoList(patch, toDoListsDTO);
+            ToDoListsDTO toDoListsDTO = listMediator.getListById(listId);
+            ToDoListsDTO toDoListsDTOPatched = ToDoListMapper.jsonPatchToToDoList(patch, toDoListsDTO);
             ToDoList toDoListToCreate = ToDoListMapper.toToDoList(toDoListsDTOPatched);
-            listMediator.create(toDoListToCreate);
+            listMediator.createList(toDoListToCreate);
             return ResponseEntity.ok(toDoListsDTOPatched);
         } catch (JsonPatchException | JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -55,14 +53,9 @@ public class ListsController {
         }
     }
 
-    private ToDoListsDTO jsonPatchToToDoList(JsonPatch patch, ToDoListsDTO toDoListsDTO) throws JsonPatchException, JsonProcessingException {
-        JsonNode patched = patch.apply(objectMapper.convertValue(toDoListsDTO, JsonNode.class));
-        return objectMapper.treeToValue(patched, ToDoListsDTO.class);
-    }
-
-    @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteNote(@PathVariable ("id") Long id){
-        listMediator.deleteNote(id);
+    @DeleteMapping(value = "/{listId}")
+    public ResponseEntity<?> deleteNote(@PathVariable ("listId") Long listId){
+        listMediator.deleteListById(listId);
         return ResponseEntity.ok().build();
     }
 }

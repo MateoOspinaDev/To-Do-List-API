@@ -10,7 +10,7 @@ import java.util.List;
 
 @Builder
 @Entity
-@Table(name = "Note")
+@Table(name = "to_do_List")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -20,14 +20,14 @@ import java.util.List;
 public class ToDoList {
 
     @SequenceGenerator(
-            name = "note_sequence",
-            sequenceName = "note_sequence",
+            name = "toDoList_sequence",
+            sequenceName = "toDoList_sequence",
             allocationSize = 1
     )
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "note_sequence"
+            generator = "toDoList_sequence"
     )
     @Column(name = "id")
     private Long id;
@@ -44,5 +44,7 @@ public class ToDoList {
 
     private String user;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "item_id")
     private List<Item> items;
 }
