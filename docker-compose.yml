@@ -1,0 +1,29 @@
+
+version: "3.9"
+services:
+
+  todolist-service:
+    build:
+      context: .
+    networks:
+      - springmysql-todo-list
+    restart: always
+    ports:
+      - "8400:8400"
+    depends_on:
+      - todolist-mysql
+
+  todolist-mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=mysql
+      - MYSQL_DATABASE=todo_list
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - springmysql-todo-list
+
+networks:
+  springmysql-todo-list:

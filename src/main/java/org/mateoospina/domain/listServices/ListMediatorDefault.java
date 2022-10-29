@@ -11,6 +11,8 @@ public class ListMediatorDefault implements ListMediator {
 
     private final ListRepository listRepository;
 
+    private final String TO_DO_LIST_NOT_FOUND = "List not found";
+
     public ListMediatorDefault(ListRepository listRepository) {
         this.listRepository = listRepository;
     }
@@ -22,17 +24,18 @@ public class ListMediatorDefault implements ListMediator {
 
     @Override
     public ToDoListsDTO getListById(long id) {
-        ToDoList list = listRepository.findById(id).orElseThrow(
-                () -> new ToDoListNotFoundException("List with id: "+id+" not found")
-        );
+        verifyIfToDoListExists(id);
+        ToDoList list = listRepository.findById(id).get();
         return ToDoListMapper.toDoListDTO(list);
     }
 
     @Override
     public void deleteListById(Long id) {
-        if(!listRepository.existsById(id)) {
-            throw new ToDoListNotFoundException("List with id: "+id+" not exists, that's why it can't be removed.");
-        }
+        verifyIfToDoListExists(id);
         listRepository.deleteById(id);
+    }
+
+    public void verifyIfToDoListExists(long id){
+        if(!listRepository.existsById(id)) throw new ToDoListNotFoundException(TO_DO_LIST_NOT_FOUND);
     }
 }

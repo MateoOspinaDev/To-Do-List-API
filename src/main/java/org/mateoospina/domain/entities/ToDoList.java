@@ -44,7 +44,5 @@ public class ToDoList {
 
     private String user;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "item_id")
-    private List<Item> items;
+    //private List<Item> items;
 }

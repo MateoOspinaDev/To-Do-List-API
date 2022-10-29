@@ -1,0 +1,13 @@
+.git
+.gradle
+.idea
+
+build/
+
+**/*.class
+
+*.dockerignore
+*.gitignore
+Dockerfile
+LICENSE
+*.md

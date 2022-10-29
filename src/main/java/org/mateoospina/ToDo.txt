@@ -1,0 +1,4 @@
+* Métodos para añadir y eliminar items de lista
+* Lógica para devolver error si en el path de las peticiones a itemController hay un id de toDoList que no existe en la DB
+*
+* Tests

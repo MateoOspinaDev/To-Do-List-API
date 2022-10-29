@@ -6,13 +6,13 @@ spring:
       path: /todo-list/docs
     swagger-ui:
       path: /todo-list/api-docs/
-  server:
-    port : 8400
   datasource:
-    url: jdbc:mysql://localhost/todo_list?useSSL=false
+    url: jdbc:mysql://todolist-mysql:3306/todo_list?useSSL=false
     username: root
-    password:
+    password: mysql
   jpa:
     hibernate.ddl-auto: create-drop
     generate-ddl: true
     show-sql: true
+server:
+  port: 8400
