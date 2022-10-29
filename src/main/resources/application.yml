@@ -7,11 +7,12 @@ spring:
     swagger-ui:
       path: /todo-list/api-docs/
   datasource:
-    url: jdbc:mysql://todolist-mysql:3306/todo_list?useSSL=false
+    url: jdbc:mysql://todolist-mysql/todo_list
     username: root
-    password: mysql
+    password: root
+    initialization-mode: always
   jpa:
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: create
     generate-ddl: true
     show-sql: true
 server:
