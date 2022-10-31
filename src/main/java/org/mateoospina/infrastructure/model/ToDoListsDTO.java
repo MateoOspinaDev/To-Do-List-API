@@ -22,6 +22,7 @@ public class ToDoListsDTO {
     @NotBlank(message = "User is empty or null")
     @Email(message = "User(email) format is not valid")
     private String user;
+    @Builder.Default
     private Date date= Calendar.getInstance().getTime();
     private Boolean done;
 }
