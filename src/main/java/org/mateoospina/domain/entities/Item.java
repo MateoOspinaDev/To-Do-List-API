@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Builder
 @Entity
@@ -27,6 +28,7 @@ public class Item {
     )
     @Column(name = "id")
     private Long id;
+    @NotBlank(message = "Description is empty or null")
     private String description;
     private boolean done;
 }

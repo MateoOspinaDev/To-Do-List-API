@@ -1,5 +1,8 @@
 package org.mateoospina.domain.listServices;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.mateoospina.domain.entities.ToDoList;
 import org.mateoospina.domain.persistence.ListRepository;
 import org.mateoospina.infrastructure.exception.ToDoListNotFoundException;
@@ -23,16 +26,24 @@ public class ListMediatorDefault implements ListMediator {
     }
 
     @Override
-    public ToDoListsDTO getListById(long id) {
+    public ToDoList getListById(long id) {
         verifyIfToDoListExists(id);
-        ToDoList list = listRepository.findById(id).get();
-        return ToDoListMapper.toDoListDTO(list);
+        return listRepository.findById(id).get();
     }
 
     @Override
     public void deleteListById(Long id) {
         verifyIfToDoListExists(id);
         listRepository.deleteById(id);
+    }
+
+    @Override
+    public ToDoList updateList(JsonPatch patch, long listId) throws JsonPatchException, JsonProcessingException {
+        verifyIfToDoListExists(listId);
+        ToDoList toDoList = listRepository.findById(listId).get();
+        ToDoList toDoListPatched = ToDoListMapper.jsonPatchToToDoList(patch, toDoList);
+        this.createList(toDoListPatched);
+        return toDoListPatched;
     }
 
     public void verifyIfToDoListExists(long id){

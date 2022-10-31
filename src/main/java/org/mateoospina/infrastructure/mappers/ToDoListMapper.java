@@ -8,35 +8,38 @@ import com.github.fge.jsonpatch.JsonPatchException;
 import org.mateoospina.domain.entities.ToDoList;
 import org.mateoospina.infrastructure.model.ToDoListsDTO;
 
+import javax.validation.Valid;
 import java.util.Calendar;
 
 public class ToDoListMapper {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
-    public static ToDoList toToDoList(ToDoListsDTO toDoListInfra){
-        ToDoList toDoList = new ToDoList();
-        toDoList.setId(toDoListInfra.getId());
-        toDoList.setName(toDoListInfra.getName());
-        toDoList.setDescription(toDoListInfra.getDescription());
-        toDoList.setUser(toDoListInfra.getUser());
-        toDoList.setCompleted(toDoListInfra.getCompleted());
-        return toDoList;
-    }
-
-    public static ToDoListsDTO toDoListDTO(ToDoList toDoList){
+    public static ToDoListsDTO toDoListToToDoListDTO(ToDoList toDoList){
         ToDoListsDTO toDoListInfra = new ToDoListsDTO();
         toDoListInfra.setId(toDoList.getId());
         toDoListInfra.setName(toDoList.getName());
         toDoListInfra.setDescription(toDoList.getDescription());
         toDoListInfra.setUser(toDoList.getUser());
         toDoListInfra.setDate(Calendar.getInstance().getTime());
-        toDoListInfra.setCompleted(toDoList.getCompleted());
+        toDoListInfra.setDone(toDoList.getDone());
         return toDoListInfra;
     }
 
-    public static ToDoListsDTO jsonPatchToToDoList(JsonPatch patch, ToDoListsDTO toDoListsDTO) throws JsonPatchException, JsonProcessingException {
-        JsonNode patched = patch.apply(objectMapper.convertValue(toDoListsDTO, JsonNode.class));
-        return objectMapper.treeToValue(patched, ToDoListsDTO.class);
+    public static ToDoList toToDoListDTOToToDoListForCreated(ToDoListsDTO toDoListInfra){
+        ToDoList toDoList = new ToDoList();
+        toDoList.setName(toDoListInfra.getName());
+        toDoList.setDescription(toDoListInfra.getDescription());
+        toDoList.setDate(toDoListInfra.getDate());
+        toDoList.setUser(toDoListInfra.getUser());
+        toDoList.setDone(toDoListInfra.getDone());
+        return toDoList;
+    }
+
+
+    public static ToDoList jsonPatchToToDoList(JsonPatch patch,ToDoList toDoList) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(toDoList, JsonNode.class));
+
+        return objectMapper.treeToValue(patched, ToDoList.class);
     }
 }

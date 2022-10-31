@@ -6,9 +6,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.fge.jsonpatch.JsonPatch;
 import com.github.fge.jsonpatch.JsonPatchException;
 import org.mateoospina.domain.entities.Item;
+import org.mateoospina.infrastructure.model.ItemDTO;
 
 public class ItemMapper {
     private static ObjectMapper objectMapper = new ObjectMapper();
+
+    public static ItemDTO itemToItemDTO(Item item){
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setId(item.getId());
+        itemDTO.setDescription(item.getDescription());
+        itemDTO.setDone(item.isDone());
+        return itemDTO;
+    }
+
+    public static Item itemDTOToItemForCreated(ItemDTO itemDTO){
+        Item item = new Item();
+        item.setDescription(itemDTO.getDescription());
+        item.setDone(itemDTO.isDone());
+        return item;
+    }
 
     public static Item jsonPatchToToDoList(JsonPatch patch, Item item) throws JsonPatchException, JsonProcessingException {
         JsonNode patched = patch.apply(objectMapper.convertValue(item, JsonNode.class));
